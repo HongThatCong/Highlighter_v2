@@ -1,0 +1,32 @@
+--- Highlighter license ---
+
+Highlighter plugin v1.0
+Highlights executed instructions
+
+This plugin will display a colored box at the executed instructions.
+It will take into account only the instructions where the application
+has been suspended.
+
+http://www.hexblog.com/2005/11/the_highlighter.html
+
+Copyright 2005 Ilfak Guilfanov, <ig@hexblog.com>
+
+--- Highlight2 license ---
+
+Plugin for Call Instructions Highlighting (multi-architectural and without idc.set_color)
+
+Copyright (C) 2018 oct0xor@gmail.com
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+http://oct0xor.github.io/2017/05/03/ida_coloring/
+https://github.com/oct0xor/highlight2
