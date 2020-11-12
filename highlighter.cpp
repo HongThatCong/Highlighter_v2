@@ -21,12 +21,6 @@ static qstrvec_t call_mnemonics;
 static int highlighter_enabled = 1;
 static int highlighter_color = COLOR_CODNAME;
 
-static const cfgopt_t g_opts[] =
-{
-    cfgopt_t("HIGHLIGHTER_ENABLED", &highlighter_enabled, 0, 1),
-    cfgopt_t("HIGHLIGHTER_COLOR", &highlighter_color, COLOR_DEFAULT, COLOR_FG_MAX),
-};
-
 static const int prefix_width = 8;
 static const char highlight_prefix[] = { COLOR_INV, ' ', ' ', COLOR_INV, 0 };
 static const char call_prefix[] = { COLOR_INV, '=', '>', COLOR_INV, 0 };
@@ -142,7 +136,6 @@ static void load_config()
     qsnprintf(cfg_path, sizeof(cfg_path), "%s\\%s\\%s%s", get_user_idadir(), CFG_SUBDIR, PLUGIN_NAME, ".ini");
     highlighter_enabled = GetPrivateProfileIntA(PLUGIN_NAME, "Enabled", 1, cfg_path);
     highlighter_color = GetPrivateProfileIntA(PLUGIN_NAME, "Color", COLOR_DEFAULT, cfg_path);
-    read_config_file(PLUGIN_NAME, g_opts, qnumber(g_opts));
 }
 
 //------------------------------------------------------------------------------
