@@ -67,12 +67,12 @@ static bool highlight_calls(qflow_chart_t *fc, int n, text_t &text)
         len = line + len - p;
         for (size_t j = 0; j < call_mnemonics.size(); j++)
         {
-            const char* instr = call_mnemonics[j].c_str();
-            ssize_t instr_len = call_mnemonics[j].length();
+            const char *instr = call_mnemonics[j].c_str();
+            size_t instr_len = call_mnemonics[j].length();
 
             if ((instr_len + 2 < len) &&
                 (0 == memcmp(instr, p + 1, instr_len)) &&
-                ( COLOR_OFF == p[1 + instr_len]))
+                (COLOR_OFF == p[1 + instr_len]))
             {
                 text[i].line[p - line] = highlighter_color;
                 // HTC - add "=> " before the call instruction
@@ -160,9 +160,9 @@ static void change_options()
 {
     static char form[MAXSTR] = { 0 };
     static char *szFmt = "%s Settings\n"
-                         " <Enable plugin:C>>\n"
-                         " <Select color:b::40::>\n\n"
-                         "Hint: to change this permanently, edit %s.cfg.\n\n";
+        " <Enable plugin:C>>\n"
+        " <Select color:b::40::>\n\n"
+        "Hint: to change this permanently, edit %s.cfg.\n\n";
     qsnprintf(form, sizeof(form), szFmt, PLUGIN_NAME, PLUGIN_NAME);
 
     static const char *items[] =
@@ -230,8 +230,8 @@ static void change_options()
 struct my_post_events_t : public post_event_visitor_t
 {
     virtual ssize_t idaapi handle_post_event(ssize_t code,
-                                             int notification_code,
-                                             va_list va);
+        int notification_code,
+        va_list va);
 };
 
 static my_post_events_t my_post_events;
@@ -257,21 +257,8 @@ static void idaapi get_user_defined_prefix(qstring *buf, ea_t ea, int lnnum, int
     if (tag_advance(line, 1)[-1] == ash.cmnt[0])
         return;         // comment line...
 
-    // We don't want the prefix to be printed again for other lines of the
-    // same instruction/data. For that we remember the line number
-    // and compare it before generating the prefix
-    //
-    static ea_t old_ea = BADADDR;
-    static int old_lnnum = 0;
-    if (old_ea == ea && old_lnnum == lnnum)
-        return;
-
     if (execset.find(ea) != execset.end())
         *buf = highlight_prefix;
-
-    // Remember the address and line number we produced the line prefix for:
-    old_ea = ea;
-    old_lnnum = lnnum;
 
     // HTC add
     // Prefix call operand with =>
@@ -279,7 +266,7 @@ static void idaapi get_user_defined_prefix(qstring *buf, ea_t ea, int lnnum, int
     tag_remove(&qline);
     for (size_t i = 0; i < call_mnemonics.size(); ++i)
     {
-        const char* instr = call_mnemonics[i].c_str();
+        const char *instr = call_mnemonics[i].c_str();
         ssize_t instr_len = call_mnemonics[i].length();
         if (0 == strnicmp(qline.c_str(), instr, instr_len))
         {
@@ -292,8 +279,8 @@ static void idaapi get_user_defined_prefix(qstring *buf, ea_t ea, int lnnum, int
 
 //------------------------------------------------------------------------------
 ssize_t idaapi my_post_events_t::handle_post_event(ssize_t retcode,
-                                                   int notification_code,
-                                                   va_list va)
+    int notification_code,
+    va_list va)
 {
     switch (notification_code)
     {
@@ -303,7 +290,7 @@ ssize_t idaapi my_post_events_t::handle_post_event(ssize_t retcode,
             debug_event_t *event = va_arg(va, debug_event_t *);
             if ((nullptr != code) && (nullptr != event))
             {
-                if (GDE_ONE_EVENT == *code)    // got an event?
+                if (GDE_ONE_EVENT == *code || GDE_MANY_EVENTS == *code) // got an or more event ?
                 {
                     execset.insert(event->ea);
                 }
@@ -344,19 +331,19 @@ static ssize_t idaapi dbg_callback(void *, int notification_code, va_list)
 //
 struct plugin_options_ah_t : public action_handler_t
 {
-    static const char* actionName;
-    static const char* actionLabel;
-    static const char* actionHotkey;
+    static const char *actionName;
+    static const char *actionLabel;
+    static const char *actionHotkey;
 
     plugin_options_ah_t() {};
 
-    virtual int idaapi activate(action_activation_ctx_t*) override
+    virtual int idaapi activate(action_activation_ctx_t *) override
     {
         change_options();
         return 0;
     }
 
-    virtual action_state_t idaapi update(action_update_ctx_t*) override
+    virtual action_state_t idaapi update(action_update_ctx_t *) override
     {
         return AST_ENABLE_ALWAYS;
     }
@@ -368,20 +355,20 @@ const char *plugin_options_ah_t::actionHotkey = "";
 
 plugin_options_ah_t plugin_options_ah = plugin_options_ah_t();
 action_desc_t plugin_options_desc = ACTION_DESC_LITERAL(plugin_options_ah_t::actionName,
-                                                        plugin_options_ah_t::actionLabel,
-                                                        &plugin_options_ah,
-                                                        plugin_options_ah_t::actionHotkey,
-                                                        nullptr,
-                                                        -1);
+    plugin_options_ah_t::actionLabel,
+    &plugin_options_ah,
+    plugin_options_ah_t::actionHotkey,
+    nullptr,
+    -1);
 
 //------------------------------------------------------------------------------
 bool idaapi run(size_t)
 {
     info("AUTOHIDE NONE\n"
-         "This is the highlighter plugin.\n"
-         "It highlights executed instructions if a debug event occurs at them.\n"
-         "The plugins is fully automatic and has no parameters.\n\n"
-         "Change the color of call instruction in Options - %s...", plugin_options_ah_t::actionLabel);
+        "This is the highlighter plugin.\n"
+        "It highlights executed instructions if a debug event occurs at them.\n"
+        "The plugins is fully automatic and has no parameters.\n\n"
+        "Change the color of call instruction in Options - %s...", plugin_options_ah_t::actionLabel);
 
     return true;
 }
@@ -436,9 +423,9 @@ plugin_t PLUGIN =
     term,                 // terminate. this pointer may be NULL.
     run,                  // invoke plugin
     wanted_name,          // long comment about the plugin
-                          // it could appear in the status line
-                          // or as a hint
-    wanted_name,          // multiline help about the plugin
-    wanted_name,          // the preferred short name of the plugin
-    wanted_hotkey         // the preferred hotkey to run the plugin
+    // it could appear in the status line
+    // or as a hint
+wanted_name,          // multiline help about the plugin
+wanted_name,          // the preferred short name of the plugin
+wanted_hotkey         // the preferred hotkey to run the plugin
 };
